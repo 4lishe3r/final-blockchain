@@ -2,7 +2,9 @@
 pragma solidity ^0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {ChainlinkOracleAdapter} from "../../src/oracles/ChainlinkOracleAdapter.sol";
+import {
+    ChainlinkOracleAdapter
+} from "../../src/oracles/ChainlinkOracleAdapter.sol";
 import {MockAggregator} from "../mocks/MockAggregator.sol";
 
 contract ChainlinkOracleAdapterTest is Test {
@@ -15,7 +17,11 @@ contract ChainlinkOracleAdapterTest is Test {
 
     function setUp() public {
         aggregator = new MockAggregator(2_000e8, 8); // $2000, 8 dec
-        adapter = new ChainlinkOracleAdapter(address(aggregator), MAX_STALENESS, admin);
+        adapter = new ChainlinkOracleAdapter(
+            address(aggregator),
+            MAX_STALENESS,
+            admin
+        );
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -104,22 +110,34 @@ contract ChainlinkOracleAdapterTest is Test {
 
     function test_Normalize_6Decimals() public {
         MockAggregator agg6 = new MockAggregator(2_000e6, 6); // 6 dec
-        ChainlinkOracleAdapter a = new ChainlinkOracleAdapter(address(agg6), MAX_STALENESS, admin);
-        (uint256 price,) = a.latestPrice();
+        ChainlinkOracleAdapter a = new ChainlinkOracleAdapter(
+            address(agg6),
+            MAX_STALENESS,
+            admin
+        );
+        (uint256 price, ) = a.latestPrice();
         assertEq(price, 2_000e18);
     }
 
     function test_Normalize_18Decimals() public {
         MockAggregator agg18 = new MockAggregator(int256(2_000e18), 18);
-        ChainlinkOracleAdapter a = new ChainlinkOracleAdapter(address(agg18), MAX_STALENESS, admin);
-        (uint256 price,) = a.latestPrice();
+        ChainlinkOracleAdapter a = new ChainlinkOracleAdapter(
+            address(agg18),
+            MAX_STALENESS,
+            admin
+        );
+        (uint256 price, ) = a.latestPrice();
         assertEq(price, 2_000e18);
     }
 
     function test_Normalize_20Decimals() public {
         MockAggregator agg20 = new MockAggregator(int256(2_000e20), 20);
-        ChainlinkOracleAdapter a = new ChainlinkOracleAdapter(address(agg20), MAX_STALENESS, admin);
-        (uint256 price,) = a.latestPrice();
+        ChainlinkOracleAdapter a = new ChainlinkOracleAdapter(
+            address(agg20),
+            MAX_STALENESS,
+            admin
+        );
+        (uint256 price, ) = a.latestPrice();
         assertEq(price, 2_000e18);
     }
 
@@ -135,9 +153,9 @@ contract ChainlinkOracleAdapterTest is Test {
     }
 
     function testFuzz_LatestPrice_NormalizesCorrectly(int256 rawPrice) public {
-        rawPrice = bound(rawPrice, 1, int256(type(uint128).max));
+        rawPrice = bound(rawPrice, 1, int256(uint256(type(uint128).max)));
         aggregator.setAnswer(rawPrice);
-        (uint256 price,) = adapter.latestPrice();
+        (uint256 price, ) = adapter.latestPrice();
         // 8 decimals → 18 decimals: price = rawPrice * 1e10
         assertEq(price, uint256(rawPrice) * 1e10);
     }

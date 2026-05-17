@@ -1,14 +1,21 @@
 {
   "name": "defi-superapp",
   "version": "1.0.0",
-  "description": "> **Scenario A** — AMM + ERC-4626 Vault + DAO Governance · Deployed on Arbitrum Sepolia",
+  "description": "> **Scenario A** \u2014 AMM + ERC-4626 Vault + DAO Governance \u00b7 Deployed on Arbitrum Sepolia",
   "main": "index.js",
   "directories": {
     "lib": "lib",
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "forge test -vvv",
+    "build": "forge build",
+    "coverage": "mkdir -p coverage && forge coverage --report markdown > coverage/coverage.md",
+    "lint:sol": "solhint \"src/**/*.sol\"",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "build:frontend": "npm --prefix frontend run build",
+    "fmt:check": "forge fmt --check",
+    "ci": "npm run fmt:check && npm run lint:sol && npm run test"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,492 @@
+/* ═══════════════════════════════════════════════════
+   DeFi Super-App — Dark Quantum Finance
+   Fonts: Syne (UI) + DM Mono (data/numbers)
+   ═══════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+
+/* ─── Tokens ─── */
+:root {
+  --bg: #05090f;
+  --bg-card: rgba(9, 16, 32, 0.88);
+  --bg-card-hov: rgba(12, 22, 44, 0.95);
+  --bg-input: rgba(4, 8, 18, 0.9);
+  --bg-row: rgba(0, 212, 255, 0.035);
+
+  --border: rgba(40, 80, 160, 0.2);
+  --border-glow: rgba(0, 212, 255, 0.3);
+  --border-focus: rgba(0, 212, 255, 0.65);
+
+  --cyan: #00d4ff;
+  --violet: #8b5cf6;
+  --green: #00ff88;
+  --amber: #f59e0b;
+  --red: #ff4d6d;
+
+  --txt: #ddeeff;
+  --txt-2: #7a99bb;
+  --txt-3: #3d5570;
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+
+  font-family: 'Syne', system-ui, sans-serif;
+  color: var(--txt);
+  background: var(--bg);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(0, 212, 255, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, .04) 1px, transparent 1px),
+    radial-gradient(ellipse 65% 55% at -5% 0%, rgba(139, 92, 246, .22) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 108% 0%, rgba(0, 212, 255, .14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 35% at 50% 105%, rgba(0, 50, 110, .35) 0%, transparent 70%);
+  background-size: 52px 52px, 52px 52px, 100% 100%, 100% 100%, 100% 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(0, 212, 255, .22);
+  color: var(--txt);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, .2);
+  border-radius: 4px;
+}
+
+/* ─── Typography ─── */
+h1,
+h2,
+h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.08;
+  margin: 0 0 6px;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  background: linear-gradient(130deg, #fff 0%, var(--cyan) 55%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--txt);
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+p {
+  color: var(--txt-2);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ─── Page layout ─── */
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px 28px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Hero ─── */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 44px 48px;
+  border-radius: var(--r-xl);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(140deg, rgba(9, 17, 38, .95) 0%, rgba(7, 12, 26, .97) 60%, rgba(14, 9, 30, .95) 100%);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 60px rgba(0, 0, 0, .65), 0 0 80px rgba(139, 92, 246, .08);
+  backdrop-filter: blur(24px);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--cyan) 40%, var(--violet) 70%, transparent 95%);
+  opacity: .55;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 65% 65% at 0% 0%, rgba(0, 212, 255, .07) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 100% 100%, rgba(139, 92, 246, .1) 0%, transparent 55%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ─── Eyebrow ─── */
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 14px;
+  opacity: .85;
+}
+
+/* ─── Wallet Box ─── */
+.walletBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.walletBox span {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--txt-2);
+  background: rgba(0, 212, 255, .07);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 7px 12px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: .02em;
+}
+
+/* ─── Buttons ─── */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  border-radius: var(--r-md);
+  padding: 11px 20px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: transform .18s ease, box-shadow .18s ease;
+  background: linear-gradient(135deg, #0077a8 0%, #00b8d9 45%, #6b40ad 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, .22), 0 1px 0 rgba(255, 255, 255, .08) inset;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(140deg, rgba(255, 255, 255, .13) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(0, 212, 255, .3);
+  pointer-events: none;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 212, 255, .32);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 212, 255, .18);
+}
+
+/* ─── Grid of cards ─── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+/* ─── Card ─── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 26px 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, .55);
+  backdrop-filter: blur(18px);
+  transition: border-color .25s, box-shadow .25s, transform .25s;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, .35), transparent);
+}
+
+.card:hover {
+  border-color: rgba(0, 212, 255, .28);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, .55), 0 0 40px rgba(0, 212, 255, .07);
+  transform: translateY(-2px);
+  background: var(--bg-card-hov);
+}
+
+.card.full {
+  grid-column: 1 / -1;
+}
+
+/* ─── Data row ─── */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: var(--r-sm);
+  background: var(--bg-row);
+  border: 1px solid rgba(0, 212, 255, .06);
+  min-height: 38px;
+}
+
+.row span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--txt-2);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.row b {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--txt);
+  text-align: right;
+  word-break: break-all;
+}
+
+/* ─── Address (truncated cyan mono) ─── */
+.addressText {
+  font-family: 'DM Mono', monospace !important;
+  font-size: 11px !important;
+  color: var(--cyan) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ─── Inputs ─── */
+input {
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  width: 100%;
+  padding: 13px 16px;
+  margin: 2px 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-input);
+  color: var(--txt);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+input::placeholder {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  color: var(--txt-3);
+}
+
+input:hover {
+  border-color: rgba(0, 212, 255, .28);
+}
+
+input:focus {
+  border-color: var(--border-focus);
+  background: rgba(2, 8, 20, .95);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, .09), 0 0 16px rgba(0, 212, 255, .06);
+}
+
+/* ─── Banners ─── */
+.warning,
+.error,
+.success {
+  padding: 13px 18px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.warning {
+  background: rgba(245, 158, 11, .1);
+  border: 1px solid rgba(245, 158, 11, .3);
+  color: var(--amber);
+}
+
+.error {
+  background: rgba(255, 77, 109, .1);
+  border: 1px solid rgba(255, 77, 109, .3);
+  color: var(--red);
+}
+
+.success {
+  background: rgba(0, 255, 136, .08);
+  border: 1px solid rgba(0, 255, 136, .28);
+  color: var(--green);
+}
+
+/* ─── Proposals ─── */
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.proposal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: var(--r-md);
+  background: rgba(4, 8, 20, .7);
+  border: 1px solid var(--border);
+  transition: border-color .2s, background .2s;
+}
+
+.proposal:hover {
+  border-color: rgba(0, 212, 255, .25);
+  background: rgba(6, 12, 28, .85);
+}
+
+.proposal b {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--txt);
+  line-height: 1.4;
+}
+
+.proposal span {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--txt-2);
+  letter-spacing: .02em;
+}
+
+.proposal span:last-child {
+  color: var(--txt-3);
+  font-size: 11px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 860px) {
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px 26px;
+  }
+
+  .walletBox {
+    align-items: flex-start;
+  }
+
+  .walletBox span {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 14px 14px 48px;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  .hero {
+    padding: 24px 18px;
+    border-radius: var(--r-lg);
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .addressText {
+    max-width: 130px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: .01ms !important;
+  }
+}
