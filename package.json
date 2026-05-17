@@ -1,0 +1,29 @@
+{
+  "name": "defi-superapp",
+  "version": "1.0.0",
+  "description": "> **Scenario A** — AMM + ERC-4626 Vault + DAO Governance · Deployed on Arbitrum Sepolia",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4lishe3r/final-blockchain.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/4lishe3r/final-blockchain/issues"
+  },
+  "homepage": "https://github.com/4lishe3r/final-blockchain#readme",
+  "devDependencies": {
+    "prettier": "^3.8.3",
+    "solhint": "^6.2.1"
+  }
+}
