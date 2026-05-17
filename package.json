@@ -1,7 +1,7 @@
 {
   "name": "defi-superapp",
   "version": "1.0.0",
-  "description": "> **Scenario A** \u2014 AMM + ERC-4626 Vault + DAO Governance \u00b7 Deployed on Arbitrum Sepolia",
+  "description": "> **Scenario A** \u2014 AMM + ERC-4626 Vault + DAO Governance \u00b7 Deployed on Base Sepolia",
   "main": "index.js",
   "directories": {
     "lib": "lib",

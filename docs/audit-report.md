@@ -5,11 +5,11 @@
 | Protocol | DeFi Super-App (AMM + ERC-4626 Vault + DAO) |
 | Scenario | A (DeFi Super-App) |
 | Auditors | Project team (internal review) |
-| Commit hash | `<FILL-IN-FINAL-COMMIT-HASH>` |
-| Network targeted | Arbitrum Sepolia (chain ID 421614) |
+| Commit hash | `a4292f828a94c5d4ad777cf0198ee50b3c367d5c` |
+| Network targeted | Base Sepolia (chain ID 84532) |
 | Solc version | 0.8.24 with `via_ir = true`, optimizer 200 runs |
 | Tools | Slither 0.10.x, Foundry `forge test/coverage`, manual review |
-| Report date | `<FILL-IN>` |
+| Report date | `May 2026` |
 
 ---
 
@@ -22,7 +22,7 @@ treasury, factory, NFT badge, Chainlink oracle adapter), the deployment scripts,
 and the supporting test suite.
 
 Review methodology combined automated static analysis (Slither), the protocol's
-own test suite (182 unit / fuzz / invariant / fork tests, coverage > 90% lines)
+own test suite (182 unit / fuzz / invariant / fork tests, coverage ≈ 72.70% lines, 69.16% statements, 57.25% branches, 81.06% functions)
 and a contract-by-contract manual review with a focus on the four classes of risk
 required by the project brief: reentrancy, access control, governance attacks,
 and oracle manipulation.
@@ -92,7 +92,7 @@ script/verify.s.sol
 
 ### 2.3 Audited Commit
 
-All references in this document use commit hash `<FILL-IN-FINAL-COMMIT-HASH>`.
+All references in this document use commit hash `a4292f828a94c5d4ad777cf0198ee50b3c367d5c`.
 File-line references (e.g. `Treasury.sol:91`) are valid at this commit.
 
 ---

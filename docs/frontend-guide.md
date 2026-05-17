@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-Open the URL printed by Vite, connect MetaMask, and switch to Arbitrum Sepolia.
+Open the URL printed by Vite, connect MetaMask, and switch to Base Sepolia.
 
 ## Before demo
 

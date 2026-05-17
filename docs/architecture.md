@@ -3,12 +3,12 @@
 | Field | Value |
 |---|---|
 | Scenario | A — DeFi Super-App (AMM + ERC-4626 Vault + DAO) |
-| Target network | Arbitrum Sepolia (chain ID 421614) |
+| Target network | Base Sepolia (chain ID 84532) |
 | Compiler | Solidity 0.8.24, `via_ir = true`, optimizer 200 runs |
 | Proxy pattern | UUPS (ERC-1967) on `GovernanceToken` and `YieldVault` |
 | Governance | OpenZeppelin v5 Governor stack + TimelockController |
 | Oracles | Chainlink AggregatorV3 wrapped in `IOracle` adapter |
-| Indexing | The Graph, hosted on Arbitrum Sepolia |
+| Indexing | The Graph, hosted on Base Sepolia |
 
 ---
 
@@ -23,7 +23,7 @@ from Chainlink; governance actions go through a Timelock.
 flowchart TB
     User([User / LP / Voter])
     Dapp[DeFi Super-App dApp<br/>React + Wagmi + Viem]
-    Protocol[Smart-contract suite<br/>on Arbitrum Sepolia]
+    Protocol[Smart-contract suite<br/>on Base Sepolia]
     Graph[(The Graph<br/>Subgraph indexer)]
     Chainlink[(Chainlink<br/>Price feeds)]
     Wallet[Wallet<br/>MetaMask / WalletConnect]

@@ -6,11 +6,11 @@
 | Optimizer | Enabled, 200 runs, `via_ir = true` |
 | Methodology | `forge test --gas-report` on the CI profile (5 000 fuzz runs) |
 | L1 gas price | 30 gwei (illustrative spot price) |
-| L2 gas price | 0.10 gwei (Arbitrum Sepolia typical) |
+| L2 gas price | 0.10 gwei (Base Sepolia typical) |
 | ETH/USD | $3 000 (illustrative) |
 
 > Numbers in this report are produced by `forge test --gas-report` against
-> commit `<FILL-IN-FINAL-COMMIT-HASH>`. Re-run before submission and paste
+> commit `a4292f828a94c5d4ad777cf0198ee50b3c367d5c`. Re-run before submission and paste
 > the actual table from the CI output. The illustrative ranges below are
 > based on the contract analysis and should be within ±10% of measured
 > values.
@@ -20,7 +20,7 @@
 ## 1. Headline Result
 
 The protocol's two most-called paths — `swap` and `deposit` — both fit
-inside the typical mempool gas budgets and trade cheaply on Arbitrum:
+inside the typical mempool gas budgets and trade cheaply on Base Sepolia:
 
 | Operation | Measured gas (illustrative) | L1 cost @ 30 gwei | L2 cost @ 0.1 gwei |
 |---|---:|---:|---:|
@@ -32,13 +32,13 @@ inside the typical mempool gas budgets and trade cheaply on Arbitrum:
 | `DeFiGovernor.propose` | 280 000 – 320 000 | $25.20 – $28.80 | $0.084 – $0.096 |
 
 > **Honest note on L1 vs L2 cost.** Execution gas itself is nearly
-> identical on Arbitrum Nitro — it runs the EVM. The bulk of the L2 saving
-> comes from calldata: Arbitrum compresses transaction calldata before
+> identical on Base — it runs the EVM. The bulk of the L2 saving
+> comes from calldata: Base compresses transaction calldata before
 > posting to L1, and charges users a fraction of the L1 calldata cost. The
 > table above shows the *execution-gas* line only; real-world L2 cost is
 > additionally reduced by ~95% on calldata-heavy transactions (most
 > swaps). A user transaction that costs $8 on L1 typically costs $0.02–$0.06
-> on Arbitrum, depending on calldata size and current L1 base fee.
+> on Base, depending on calldata size and current L1 base fee.
 
 ---
 
@@ -52,9 +52,9 @@ inside the typical mempool gas budgets and trade cheaply on Arbitrum:
 - **`forge snapshot`** is suggested for diff-based regression tracking
   between commits; the team should commit `.gas-snapshot` before
   submission.
-- **L1 vs L2 modelling.** Execution gas is identical on Arbitrum Nitro
+- **L1 vs L2 modelling.** Execution gas is identical on Base
   (same EVM). The difference is purely calldata pricing on L2 and the
-  per-block base fee. We use 30 gwei (L1) and 0.10 gwei (Arbitrum
+  per-block base fee. We use 30 gwei (L1) and 0.10 gwei (Base
   Sepolia typical) as point estimates.
 
 ### 2.2 What is NOT measured
@@ -233,7 +233,7 @@ justifications for keeping the Yul implementation:
 
 Cost model:
 - L1 (Ethereum mainnet, illustrative): 30 gwei × ETH price $3 000
-- L2 (Arbitrum Sepolia, illustrative): 0.10 gwei × ETH price $3 000
+- L2 (Base Sepolia, illustrative): 0.10 gwei × ETH price $3 000
 
 | Operation | Execution gas | L1 cost | L2 cost | L2 saving |
 |---|---:|---:|---:|---:|
@@ -248,9 +248,9 @@ Cost model:
 
 The 99.67% number is the same for every row because L1 and L2 charge the
 same execution gas; the only changing factor is gas price. In practice,
-Arbitrum users pay an additional calldata fee that depends on the size
+Base users pay an additional calldata fee that depends on the size
 of the transaction's calldata. For typical swap calldata (~300 bytes
-compressed) on Arbitrum Sepolia this adds roughly $0.02–$0.10 per
+compressed) on Base Sepolia this adds roughly $0.02–$0.10 per
 transaction at current L1 base fees. The real-world user-paid cost is
 the sum of (execution gas × L2 gas price) + (compressed calldata × L1
 data fee).
