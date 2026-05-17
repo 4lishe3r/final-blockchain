@@ -1,0 +1,10 @@
+{
+    "extends": "solhint:recommended",
+    "rules": {
+        "compiler-version": "off",
+        "func-visibility": "off",
+        "private-vars-leading-underscore": "off",
+        "reason-string": "off",
+        "ordering": "off"
+    }
+}
