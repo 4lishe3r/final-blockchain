@@ -160,8 +160,9 @@ contract ProtocolFactoryTest is Test {
     //////////////////////////////////////////////////////////////*/
 
     function test_GrantCreatorRole_AllowsCreation() public {
+        bytes32 creatorRole = factory.POOL_CREATOR_ROLE();
         vm.prank(admin);
-        factory.grantRole(factory.POOL_CREATOR_ROLE(), creator);
+        factory.grantRole(creatorRole, creator);
 
         vm.prank(creator);
         address pool = factory.createPool(address(tokenA), address(tokenB));
@@ -234,7 +235,7 @@ contract ProtocolNFTTest is Test {
     function test_Mint_RevertIf_AlreadyHolds() public {
         vm.startPrank(admin);
         nft.mint(alice, "uri1");
-        vm.expectRevert(ProtocolNFT.AlreadyHoldsBadge.selector);
+        vm.expectRevert(abi.encodeWithSelector(ProtocolNFT.AlreadyHoldsBadge.selector, alice));
         nft.mint(alice, "uri2");
         vm.stopPrank();
     }
@@ -252,8 +253,9 @@ contract ProtocolNFTTest is Test {
     }
 
     function test_Mint_CustomMinter() public {
+        bytes32 minterRole = nft.MINTER_ROLE();
         vm.prank(admin);
-        nft.grantRole(nft.MINTER_ROLE(), minter);
+        nft.grantRole(minterRole, minter);
 
         vm.prank(minter);
         nft.mint(alice, "uri");

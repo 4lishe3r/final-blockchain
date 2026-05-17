@@ -42,10 +42,15 @@ contract ConstantProductAMMTest is Test {
     //////////////////////////////////////////////////////////////*/
 
     function _addInitialLiquidity() internal returns (uint256 shares) {
+        // Determine which of tokenA/tokenB maps to token0/token1 after sorting
+        bool aIsToken0 = address(amm.token0()) == address(tokenA);
+        uint256 token0Amount = aIsToken0 ? INITIAL_LIQUIDITY_A : INITIAL_LIQUIDITY_B;
+        uint256 token1Amount = aIsToken0 ? INITIAL_LIQUIDITY_B : INITIAL_LIQUIDITY_A;
+
         vm.startPrank(alice);
-        tokenA.approve(address(amm), INITIAL_LIQUIDITY_A);
-        tokenB.approve(address(amm), INITIAL_LIQUIDITY_B);
-        shares = amm.addLiquidity(INITIAL_LIQUIDITY_A, INITIAL_LIQUIDITY_B, 0, 0, alice);
+        ERC20Mock(address(amm.token0())).approve(address(amm), token0Amount);
+        ERC20Mock(address(amm.token1())).approve(address(amm), token1Amount);
+        shares = amm.addLiquidity(token0Amount, token1Amount, 0, 0, alice);
         vm.stopPrank();
     }
 
@@ -81,9 +86,12 @@ contract ConstantProductAMMTest is Test {
         uint256 sharesBefore = amm.totalSupply();
 
         vm.startPrank(bob);
-        tokenA.approve(address(amm), 10_000e18);
-        tokenB.approve(address(amm), 20_000e18);
-        uint256 shares = amm.addLiquidity(10_000e18, 20_000e18, 0, 0, bob);
+        bool aIsToken0 = address(amm.token0()) == address(tokenA);
+        uint256 bob0Amount = aIsToken0 ? 10_000e18 : 20_000e18;
+        uint256 bob1Amount = aIsToken0 ? 20_000e18 : 10_000e18;
+        ERC20Mock(address(amm.token0())).approve(address(amm), bob0Amount);
+        ERC20Mock(address(amm.token1())).approve(address(amm), bob1Amount);
+        uint256 shares = amm.addLiquidity(bob0Amount, bob1Amount, 0, 0, bob);
         vm.stopPrank();
 
         assertGt(shares, 0);
@@ -124,8 +132,8 @@ contract ConstantProductAMMTest is Test {
     function test_RemoveLiquidity_Full() public {
         uint256 shares = _addInitialLiquidity();
 
-        uint256 aliceA_before = tokenA.balanceOf(alice);
-        uint256 aliceB_before = tokenB.balanceOf(alice);
+        uint256 alice0_before = ERC20Mock(address(amm.token0())).balanceOf(alice);
+        uint256 alice1_before = ERC20Mock(address(amm.token1())).balanceOf(alice);
 
         vm.startPrank(alice);
         amm.approve(address(amm), shares);
@@ -134,8 +142,8 @@ contract ConstantProductAMMTest is Test {
 
         assertGt(out0, 0);
         assertGt(out1, 0);
-        assertEq(tokenA.balanceOf(alice), aliceA_before + out0);
-        assertEq(tokenB.balanceOf(alice), aliceB_before + out1);
+        assertEq(ERC20Mock(address(amm.token0())).balanceOf(alice), alice0_before + out0);
+        assertEq(ERC20Mock(address(amm.token1())).balanceOf(alice), alice1_before + out1);
     }
 
     function test_RemoveLiquidity_RevertIf_ZeroShares() public {
@@ -187,27 +195,30 @@ contract ConstantProductAMMTest is Test {
 
     function test_Swap_RevertIf_ZeroInput() public {
         _addInitialLiquidity();
+        address tok0 = address(amm.token0());
         vm.startPrank(bob);
         vm.expectRevert(ConstantProductAMM.InsufficientInputAmount.selector);
-        amm.swap(address(amm.token0()), 0, 0, bob);
+        amm.swap(tok0, 0, 0, bob);
         vm.stopPrank();
     }
 
     function test_Swap_RevertIf_SlippageTooHigh() public {
         _addInitialLiquidity();
+        address tok0 = address(amm.token0());
         uint256 amountIn = 1_000e18;
         vm.startPrank(bob);
-        amm.token0().approve(address(amm), amountIn);
+        ERC20Mock(tok0).approve(address(amm), amountIn);
         vm.expectRevert();
-        amm.swap(address(amm.token0()), amountIn, type(uint256).max, bob);
+        amm.swap(tok0, amountIn, type(uint256).max, bob);
         vm.stopPrank();
     }
 
     function test_Swap_RevertIf_NoLiquidity() public {
+        address tok0 = address(amm.token0());
         vm.startPrank(bob);
         amm.token0().approve(address(amm), 1000e18);
         vm.expectRevert(ConstantProductAMM.InsufficientLiquidity.selector);
-        amm.swap(address(amm.token0()), 1000e18, 0, bob);
+        amm.swap(tok0, 1000e18, 0, bob);
         vm.stopPrank();
     }
 
@@ -220,10 +231,11 @@ contract ConstantProductAMMTest is Test {
         vm.prank(admin);
         amm.pause();
 
+        address tok0 = address(amm.token0());
         vm.startPrank(bob);
-        amm.token0().approve(address(amm), 1000e18);
+        ERC20Mock(tok0).approve(address(amm), 1000e18);
         vm.expectRevert();
-        amm.swap(address(amm.token0()), 1000e18, 0, bob);
+        amm.swap(tok0, 1000e18, 0, bob);
         vm.stopPrank();
     }
 
@@ -460,13 +472,15 @@ contract AMMInvariantTest is Test {
         address admin = makeAddr("admin");
         amm = new ConstantProductAMM(address(tA), address(tB), admin);
 
-        // Seed liquidity
+        // Seed liquidity — respect sorted token order
         address alice = makeAddr("alice");
-        tA.mint(alice, 100_000e18);
-        tB.mint(alice, 200_000e18);
+        ERC20Mock tok0 = ERC20Mock(address(amm.token0()));
+        ERC20Mock tok1 = ERC20Mock(address(amm.token1()));
+        tok0.mint(alice, 200_000e18);
+        tok1.mint(alice, 200_000e18);
         vm.startPrank(alice);
-        tA.approve(address(amm), 100_000e18);
-        tB.approve(address(amm), 200_000e18);
+        tok0.approve(address(amm), 100_000e18);
+        tok1.approve(address(amm), 200_000e18);
         amm.addLiquidity(100_000e18, 200_000e18, 0, 0, alice);
         vm.stopPrank();
 
