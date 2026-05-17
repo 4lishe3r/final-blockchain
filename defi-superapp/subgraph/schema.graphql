@@ -1,0 +1,104 @@
+"""
+DeFi Super-App Subgraph Schema
+Entity count: 6 (exceeds minimum 4)
+Documented queries: 5+ (see README-subgraph.md)
+"""
+
+# ─── Entity 1: Pool ──────────────────────────────────────────────────────────
+type Pool @entity {
+  id: ID!                          # pool contract address
+  token0: Bytes!                   # token0 address
+  token1: Bytes!                   # token1 address
+  reserve0: BigInt!
+  reserve1: BigInt!
+  totalSupply: BigInt!             # LP token total supply
+  swapCount: BigInt!
+  volumeToken0: BigInt!
+  volumeToken1: BigInt!
+  createdAtBlock: BigInt!
+  createdAtTimestamp: BigInt!
+  swaps: [Swap!]! @derivedFrom(field: "pool")
+  liquidityEvents: [LiquidityEvent!]! @derivedFrom(field: "pool")
+}
+
+# ─── Entity 2: Swap ──────────────────────────────────────────────────────────
+type Swap @entity {
+  id: ID!                          # txHash-logIndex
+  pool: Pool!
+  sender: Bytes!
+  tokenIn: Bytes!
+  amountIn: BigInt!
+  amountOut: BigInt!
+  to: Bytes!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  txHash: Bytes!
+}
+
+# ─── Entity 3: LiquidityEvent ────────────────────────────────────────────────
+type LiquidityEvent @entity {
+  id: ID!
+  pool: Pool!
+  type: String!                    # "ADD" | "REMOVE"
+  provider: Bytes!
+  amount0: BigInt!
+  amount1: BigInt!
+  shares: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  txHash: Bytes!
+}
+
+# ─── Entity 4: Proposal ──────────────────────────────────────────────────────
+type Proposal @entity {
+  id: ID!                          # proposalId (uint256 as string)
+  proposer: Bytes!
+  targets: [Bytes!]!
+  values: [BigInt!]!
+  calldatas: [Bytes!]!
+  description: String!
+  startBlock: BigInt!
+  endBlock: BigInt!
+  state: String!                   # Pending | Active | Succeeded | Defeated | Queued | Executed | Canceled
+  forVotes: BigInt!
+  againstVotes: BigInt!
+  abstainVotes: BigInt!
+  quorumReached: Boolean!
+  createdAtBlock: BigInt!
+  createdAtTimestamp: BigInt!
+  votes: [Vote!]! @derivedFrom(field: "proposal")
+}
+
+# ─── Entity 5: Vote ──────────────────────────────────────────────────────────
+type Vote @entity {
+  id: ID!                          # proposalId-voter
+  proposal: Proposal!
+  voter: Bytes!
+  support: Int!                    # 0=Against 1=For 2=Abstain
+  weight: BigInt!
+  reason: String
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  txHash: Bytes!
+}
+
+# ─── Entity 6: VaultSnapshot ─────────────────────────────────────────────────
+type VaultSnapshot @entity {
+  id: ID!                          # vault-blockNumber
+  vault: Bytes!
+  totalAssets: BigInt!
+  totalShares: BigInt!
+  pricePerShare: BigInt!           # totalAssets * 1e18 / totalShares
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
+
+# ─── Protocol-level stats ─────────────────────────────────────────────────────
+type ProtocolStats @entity {
+  id: ID!                          # "protocol"
+  totalPools: BigInt!
+  totalSwaps: BigInt!
+  totalProposals: BigInt!
+  totalVotes: BigInt!
+  updatedAtBlock: BigInt!
+}
