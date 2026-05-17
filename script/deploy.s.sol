@@ -2,20 +2,14 @@
 pragma solidity ^0.8.24;
 
 import {Script, console2} from "forge-std/Script.sol";
-import {
-    ERC1967Proxy
-} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import {
-    TimelockController
-} from "@openzeppelin/contracts/governance/TimelockController.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
 
 import {GovernanceToken} from "../src/tokens/GovernanceToken.sol";
 import {ProtocolNFT} from "../src/tokens/ProtocolNFT.sol";
 import {ConstantProductAMM} from "../src/amm/ConstantProductAMM.sol";
 import {YieldVault} from "../src/vault/YieldVault.sol";
-import {
-    ChainlinkOracleAdapter
-} from "../src/oracles/ChainlinkOracleAdapter.sol";
+import {ChainlinkOracleAdapter} from "../src/oracles/ChainlinkOracleAdapter.sol";
 import {ProtocolFactory} from "../src/factory/ProtocolFactory.sol";
 import {DeFiGovernor} from "../src/governance/DeFiGovernor.sol";
 import {Treasury} from "../src/Treasury.sol";
@@ -57,10 +51,8 @@ contract DeployScript is Script {
 
         GovernanceToken govImpl = new GovernanceToken();
 
-        bytes memory govInitData = abi.encodeCall(
-            GovernanceToken.initialize,
-            ("DeFi Governance Token", "DGT", 100_000_000e18, deployer)
-        );
+        bytes memory govInitData =
+            abi.encodeCall(GovernanceToken.initialize, ("DeFi Governance Token", "DGT", 100_000_000e18, deployer));
 
         ERC1967Proxy govProxy = new ERC1967Proxy(address(govImpl), govInitData);
 
@@ -69,15 +61,11 @@ contract DeployScript is Script {
 
         console2.log("GovToken proxy :", d.govTokenProxy);
 
-        d.protocolNFT = address(
-            new ProtocolNFT("ipfs://protocol-nft/", deployer, false)
-        );
+        d.protocolNFT = address(new ProtocolNFT("ipfs://protocol-nft/", deployer, false));
 
         console2.log("ProtocolNFT    :", d.protocolNFT);
 
-        d.oracle = address(
-            new ChainlinkOracleAdapter(address(mockFeed), 3600, deployer)
-        );
+        d.oracle = address(new ChainlinkOracleAdapter(address(mockFeed), 3600, deployer));
 
         console2.log("Oracle         :", d.oracle);
 
@@ -92,21 +80,10 @@ contract DeployScript is Script {
         YieldVault vaultImpl = new YieldVault();
 
         bytes memory vaultInitData = abi.encodeCall(
-            YieldVault.initialize,
-            (
-                assetToken,
-                "Yield Vault Shares",
-                "yvShares",
-                0,
-                d.oracle,
-                deployer
-            )
+            YieldVault.initialize, (assetToken, "Yield Vault Shares", "yvShares", 0, d.oracle, deployer)
         );
 
-        ERC1967Proxy vaultProxy = new ERC1967Proxy(
-            address(vaultImpl),
-            vaultInitData
-        );
+        ERC1967Proxy vaultProxy = new ERC1967Proxy(address(vaultImpl), vaultInitData);
 
         d.vault = address(vaultImpl);
         d.vaultProxy = address(vaultProxy);
@@ -119,18 +96,11 @@ contract DeployScript is Script {
         proposers[0] = address(0);
         executors[0] = address(0);
 
-        TimelockController timelock = new TimelockController(
-            2 days,
-            proposers,
-            executors,
-            deployer
-        );
+        TimelockController timelock = new TimelockController(2 days, proposers, executors, deployer);
 
         d.timelock = address(timelock);
 
-        d.governor = address(
-            new DeFiGovernor(IVotes(d.govTokenProxy), timelock)
-        );
+        d.governor = address(new DeFiGovernor(IVotes(d.govTokenProxy), timelock));
 
         d.treasury = address(new Treasury(deployer, d.timelock));
 
@@ -142,15 +112,9 @@ contract DeployScript is Script {
         timelock.grantRole(CANCELLER_ROLE, multisig);
         timelock.revokeRole(ADMIN_ROLE, deployer);
 
-        GovernanceToken(d.govTokenProxy).grantRole(
-            GovernanceToken(d.govTokenProxy).DEFAULT_ADMIN_ROLE(),
-            d.timelock
-        );
+        GovernanceToken(d.govTokenProxy).grantRole(GovernanceToken(d.govTokenProxy).DEFAULT_ADMIN_ROLE(), d.timelock);
 
-        GovernanceToken(d.govTokenProxy).grantRole(
-            GovernanceToken(d.govTokenProxy).UPGRADER_ROLE(),
-            d.timelock
-        );
+        GovernanceToken(d.govTokenProxy).grantRole(GovernanceToken(d.govTokenProxy).UPGRADER_ROLE(), d.timelock);
 
         GovernanceToken(d.govTokenProxy).mint(multisig, 10_000_000e18);
 

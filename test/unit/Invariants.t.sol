@@ -2,9 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {
-    ERC1967Proxy
-} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 
 import {Treasury} from "../../src/Treasury.sol";
@@ -178,15 +176,7 @@ contract VaultInvariantTest is Test {
         asset = new ERC20Mock();
         YieldVault impl = new YieldVault();
         bytes memory initData = abi.encodeCall(
-            YieldVault.initialize,
-            (
-                address(asset),
-                "Yield Vault",
-                "yVLT",
-                0,
-                address(0),
-                address(this)
-            )
+            YieldVault.initialize, (address(asset), "Yield Vault", "yVLT", 0, address(0), address(this))
         );
         ERC1967Proxy proxy = new ERC1967Proxy(address(impl), initData);
         vault = YieldVault(address(proxy));
@@ -199,9 +189,7 @@ contract VaultInvariantTest is Test {
     ///         This is the property the ERC-4626 share math relies on.
     function invariant_Vault_TotalAssetsEqualsBalance() public view {
         assertEq(
-            vault.totalAssets(),
-            asset.balanceOf(address(vault)),
-            "totalAssets() must equal asset.balanceOf(vault)"
+            vault.totalAssets(), asset.balanceOf(address(vault)), "totalAssets() must equal asset.balanceOf(vault)"
         );
     }
 }
@@ -249,10 +237,7 @@ contract GovTokenInvariantTest is Test {
 
     function setUp() public {
         GovernanceToken impl = new GovernanceToken();
-        bytes memory initData = abi.encodeCall(
-            GovernanceToken.initialize,
-            ("Gov", "G", 100_000_000e18, admin)
-        );
+        bytes memory initData = abi.encodeCall(GovernanceToken.initialize, ("Gov", "G", 100_000_000e18, admin));
         ERC1967Proxy proxy = new ERC1967Proxy(address(impl), initData);
         token = GovernanceToken(address(proxy));
 
@@ -262,10 +247,6 @@ contract GovTokenInvariantTest is Test {
 
     /// @notice The mint() check + burn() reduction together enforce this bound.
     function invariant_GovToken_SupplyWithinCap() public view {
-        assertLe(
-            token.totalSupply(),
-            token.maxSupply(),
-            "totalSupply must never exceed maxSupply"
-        );
+        assertLe(token.totalSupply(), token.maxSupply(), "totalSupply must never exceed maxSupply");
     }
 }
