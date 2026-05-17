@@ -9,19 +9,16 @@ import {GovernanceTokenV2} from "../../src/tokens/GovernanceTokenV2.sol";
 contract GovernanceTokenTest is Test {
     GovernanceToken public token;
 
-    address public admin  = makeAddr("admin");
-    address public alice  = makeAddr("alice");
-    address public bob    = makeAddr("bob");
+    address public admin = makeAddr("admin");
+    address public alice = makeAddr("alice");
+    address public bob = makeAddr("bob");
     address public minter = makeAddr("minter");
 
     uint256 constant MAX_SUPPLY = 100_000_000e18;
 
     function setUp() public {
         GovernanceToken impl = new GovernanceToken();
-        bytes memory initData = abi.encodeCall(
-            GovernanceToken.initialize,
-            ("DeFi Gov Token", "DGT", MAX_SUPPLY, admin)
-        );
+        bytes memory initData = abi.encodeCall(GovernanceToken.initialize, ("DeFi Gov Token", "DGT", MAX_SUPPLY, admin));
         ERC1967Proxy proxy = new ERC1967Proxy(address(impl), initData);
         token = GovernanceToken(address(proxy));
     }
@@ -50,10 +47,7 @@ contract GovernanceTokenTest is Test {
 
     function test_Initialize_RevertIf_ZeroAdmin() public {
         GovernanceToken impl2 = new GovernanceToken();
-        bytes memory bad = abi.encodeCall(
-            GovernanceToken.initialize,
-            ("T", "T", 1e18, address(0))
-        );
+        bytes memory bad = abi.encodeCall(GovernanceToken.initialize, ("T", "T", 1e18, address(0)));
         vm.expectRevert();
         new ERC1967Proxy(address(impl2), bad);
     }
@@ -201,7 +195,7 @@ contract GovernanceTokenTest is Test {
 
     function test_Permit_WorksWithSignature() public {
         uint256 privKey = 0xA11CE;
-        address owner   = vm.addr(privKey);
+        address owner = vm.addr(privKey);
 
         vm.prank(admin);
         token.mint(owner, 1_000e18);
@@ -229,22 +223,22 @@ contract GovernanceTokenTest is Test {
                         INTERNAL HELPERS
     //////////////////////////////////////////////////////////////*/
 
-    function _signPermit(
-        uint256 privKey,
-        address owner_,
-        address spender,
-        uint256 value,
-        uint256 deadline
-    ) internal view returns (uint8 v, bytes32 r, bytes32 s) {
+    function _signPermit(uint256 privKey, address owner_, address spender, uint256 value, uint256 deadline)
+        internal
+        view
+        returns (uint8 v, bytes32 r, bytes32 s)
+    {
         bytes32 domainSeparator = token.DOMAIN_SEPARATOR();
-        bytes32 structHash = keccak256(abi.encode(
-            keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"),
-            owner_,
-            spender,
-            value,
-            token.nonces(owner_),
-            deadline
-        ));
+        bytes32 structHash = keccak256(
+            abi.encode(
+                keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"),
+                owner_,
+                spender,
+                value,
+                token.nonces(owner_),
+                deadline
+            )
+        );
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
         (v, r, s) = vm.sign(privKey, digest);
     }
@@ -258,17 +252,15 @@ contract GovernanceTokenV2Test is Test {
     GovernanceToken public v1;
     GovernanceTokenV2 public v2;
 
-    address public admin    = makeAddr("admin");
-    address public alice    = makeAddr("alice");
+    address public admin = makeAddr("admin");
+    address public alice = makeAddr("alice");
     address public treasury = makeAddr("treasury");
 
     function setUp() public {
         // Deploy V1
         GovernanceToken impl1 = new GovernanceToken();
-        bytes memory initData = abi.encodeCall(
-            GovernanceToken.initialize,
-            ("DeFi Gov Token", "DGT", 100_000_000e18, admin)
-        );
+        bytes memory initData =
+            abi.encodeCall(GovernanceToken.initialize, ("DeFi Gov Token", "DGT", 100_000_000e18, admin));
         ERC1967Proxy proxy = new ERC1967Proxy(address(impl1), initData);
         v1 = GovernanceToken(address(proxy));
 
@@ -372,10 +364,8 @@ contract GovernanceTokenFuzz is Test {
 
     function setUp() public {
         GovernanceToken impl = new GovernanceToken();
-        bytes memory initData = abi.encodeCall(
-            GovernanceToken.initialize,
-            ("DeFi Gov Token", "DGT", type(uint128).max, admin)
-        );
+        bytes memory initData =
+            abi.encodeCall(GovernanceToken.initialize, ("DeFi Gov Token", "DGT", type(uint128).max, admin));
         ERC1967Proxy proxy = new ERC1967Proxy(address(impl), initData);
         token = GovernanceToken(address(proxy));
     }

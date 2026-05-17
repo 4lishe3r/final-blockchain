@@ -15,23 +15,23 @@ contract MockAggregator is AggregatorV3Interface {
     /// @param initialPrice  Initial price (in feed decimals)
     /// @param dec_          Feed decimals
     constructor(int256 initialPrice, uint8 dec_) {
-        _decimals    = dec_;
-        _answer      = initialPrice;
-        _updatedAt   = block.timestamp;
-        _roundId     = 1;
+        _decimals = dec_;
+        _answer = initialPrice;
+        _updatedAt = block.timestamp;
+        _roundId = 1;
         _invalidRound = false;
     }
 
     // ─── Setters (test helpers) ──────────────────────────────────
 
     function setPrice(int256 price) external {
-        _answer    = price;
+        _answer = price;
         _updatedAt = block.timestamp;
         _roundId++;
     }
 
     function setAnswer(int256 answer) external {
-        _answer    = answer;
+        _answer = answer;
         _updatedAt = block.timestamp;
         _roundId++;
     }

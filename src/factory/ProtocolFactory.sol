@@ -62,11 +62,7 @@ contract ProtocolFactory is AccessControl {
     /// @param tokenA First token
     /// @param tokenB Second token
     /// @return pool  Deployed pool address
-    function createPool(address tokenA, address tokenB)
-        external
-        onlyRole(POOL_CREATOR_ROLE)
-        returns (address pool)
-    {
+    function createPool(address tokenA, address tokenB) external onlyRole(POOL_CREATOR_ROLE) returns (address pool) {
         (address token0, address token1) = _sortTokens(tokenA, tokenB);
         _revertIfExists(token0, token1);
 
@@ -82,11 +78,7 @@ contract ProtocolFactory is AccessControl {
     /// @param tokenA First token
     /// @param tokenB Second token
     /// @return pool  Deployed pool address
-    function createPool2(address tokenA, address tokenB)
-        external
-        onlyRole(POOL_CREATOR_ROLE)
-        returns (address pool)
-    {
+    function createPool2(address tokenA, address tokenB) external onlyRole(POOL_CREATOR_ROLE) returns (address pool) {
         (address token0, address token1) = _sortTokens(tokenA, tokenB);
         _revertIfExists(token0, token1);
 
@@ -109,9 +101,7 @@ contract ProtocolFactory is AccessControl {
             abi.encodePacked(type(ConstantProductAMM).creationCode, abi.encode(token0, token1, msg.sender));
 
         predicted = address(
-            uint160(
-                uint256(keccak256(abi.encodePacked(bytes1(0xff), address(this), salt, keccak256(initCode))))
-            )
+            uint160(uint256(keccak256(abi.encodePacked(bytes1(0xff), address(this), salt, keccak256(initCode)))))
         );
     }
 

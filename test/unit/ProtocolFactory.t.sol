@@ -17,7 +17,7 @@ contract ProtocolFactoryTest is Test {
     ERC20Mock public tokenB;
     ERC20Mock public tokenC;
 
-    address public admin   = makeAddr("admin");
+    address public admin = makeAddr("admin");
     address public creator = makeAddr("creator");
 
     function setUp() public {
@@ -109,7 +109,7 @@ contract ProtocolFactoryTest is Test {
 
     function test_CreatePool2_DifferentAddressFromCreate() public {
         vm.startPrank(admin);
-        address poolCreate  = factory.createPool(address(tokenA), address(tokenB));
+        address poolCreate = factory.createPool(address(tokenA), address(tokenB));
         address poolCreate2 = factory.createPool2(address(tokenA), address(tokenC));
         vm.stopPrank();
 
@@ -191,10 +191,10 @@ contract ProtocolFactoryTest is Test {
 contract ProtocolNFTTest is Test {
     ProtocolNFT public nft;
 
-    address public admin  = makeAddr("admin");
+    address public admin = makeAddr("admin");
     address public minter = makeAddr("minter");
-    address public alice  = makeAddr("alice");
-    address public bob    = makeAddr("bob");
+    address public alice = makeAddr("alice");
+    address public bob = makeAddr("bob");
 
     function setUp() public {
         nft = new ProtocolNFT("ipfs://test/", admin, false);

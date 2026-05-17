@@ -87,10 +87,7 @@ contract GovernanceTokenV2 is GovernanceToken {
 
     /// @dev Intercepts all transfers. If tax > 0, deducts from amount and sends to treasury.
     ///      Mint (from == 0) and burn (to == 0) are exempt from tax.
-    function _update(address from, address to, uint256 value)
-        internal
-        override
-    {
+    function _update(address from, address to, uint256 value) internal override {
         uint256 tax = 0;
         if (from != address(0) && to != address(0) && transferTaxBps > 0 && treasury != address(0)) {
             tax = (value * transferTaxBps) / 10_000;

@@ -48,9 +48,7 @@ contract ProtocolNFT is ERC721URIStorage, AccessControl {
                             CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(string memory baseURI_, address admin, bool soulbound_)
-        ERC721("DeFi Protocol Badge", "DPB")
-    {
+    constructor(string memory baseURI_, address admin, bool soulbound_) ERC721("DeFi Protocol Badge", "DPB") {
         _baseTokenURI = baseURI_;
         soulbound = soulbound_;
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
@@ -113,11 +111,7 @@ contract ProtocolNFT is ERC721URIStorage, AccessControl {
     //////////////////////////////////////////////////////////////*/
 
     /// @dev Block transfers if soulbound. Mint (from == 0) and burn (to == 0) still allowed.
-    function _update(address to, uint256 tokenId, address auth)
-        internal
-        override(ERC721)
-        returns (address from)
-    {
+    function _update(address to, uint256 tokenId, address auth) internal override(ERC721) returns (address from) {
         from = super._update(to, tokenId, auth);
         if (soulbound && from != address(0) && to != address(0)) {
             revert Soulbound();

@@ -77,11 +77,7 @@ contract ConstantProductAMM is ERC20, ReentrancyGuard, Pausable, AccessControl {
     //////////////////////////////////////////////////////////////*/
 
     event Swap(
-        address indexed sender,
-        address indexed tokenIn,
-        uint256 amountIn,
-        uint256 amountOut,
-        address indexed to
+        address indexed sender, address indexed tokenIn, uint256 amountIn, uint256 amountOut, address indexed to
     );
     event LiquidityAdded(address indexed provider, uint256 amount0, uint256 amount1, uint256 shares);
     event LiquidityRemoved(address indexed provider, uint256 amount0, uint256 amount1, uint256 shares);
@@ -237,9 +233,8 @@ contract ConstantProductAMM is ERC20, ReentrancyGuard, Pausable, AccessControl {
         if (tokenIn != address(token0) && tokenIn != address(token1)) revert InvalidToken();
 
         bool zeroForOne = tokenIn == address(token0);
-        (IERC20 tokenInContract, IERC20 tokenOutContract, uint256 reserveIn, uint256 reserveOut) = zeroForOne
-            ? (token0, token1, reserve0, reserve1)
-            : (token1, token0, reserve1, reserve0);
+        (IERC20 tokenInContract, IERC20 tokenOutContract, uint256 reserveIn, uint256 reserveOut) =
+            zeroForOne ? (token0, token1, reserve0, reserve1) : (token1, token0, reserve1, reserve0);
 
         if (reserveIn == 0 || reserveOut == 0) revert InsufficientLiquidity();
 

@@ -20,10 +20,10 @@ contract VerifyScript is Script {
     bool private _allPassed = true;
 
     function run() external view {
-        address govToken  = vm.envAddress("GOV_TOKEN");
-        address timelock  = vm.envAddress("TIMELOCK");
-        address governor  = vm.envAddress("GOVERNOR");
-        address treasury  = vm.envAddress("TREASURY");
+        address govToken = vm.envAddress("GOV_TOKEN");
+        address timelock = vm.envAddress("TIMELOCK");
+        address governor = vm.envAddress("GOVERNOR");
+        address treasury = vm.envAddress("TREASURY");
 
         console2.log("=== Post-Deployment Verification ===");
         console2.log("Network :", block.chainid);
@@ -64,7 +64,7 @@ contract VerifyScript is Script {
         console2.log("\n--- Governor ---");
         DeFiGovernor gov = DeFiGovernor(payable(governor));
 
-        _assert("Voting delay  == 7200 blocks (1 day)",  gov.votingDelay(),  7200,  7200);
+        _assert("Voting delay  == 7200 blocks (1 day)", gov.votingDelay(), 7200, 7200);
         _assert("Voting period == 50400 blocks (1 week)", gov.votingPeriod(), 50400, 50400);
         _assert("Quorum numerator == 4%", gov.quorumNumerator(), 4, 4);
 
@@ -94,7 +94,7 @@ contract VerifyScript is Script {
 
         // Timelock must hold admin on govToken
         _assertBool("Timelock is DEFAULT_ADMIN on GovToken", gt.hasRole(ADMIN, timelock));
-        _assertBool("Timelock is UPGRADER on GovToken",      gt.hasRole(UPGRADER, timelock));
+        _assertBool("Timelock is UPGRADER on GovToken", gt.hasRole(UPGRADER, timelock));
 
         console2.log("\nNote: If deployer still holds roles, that is a misconfiguration.");
     }

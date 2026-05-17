@@ -18,7 +18,7 @@ contract ConstantProductAMMTest is Test {
     ERC20Mock public tokenB;
 
     address public alice = makeAddr("alice");
-    address public bob   = makeAddr("bob");
+    address public bob = makeAddr("bob");
     address public admin = makeAddr("admin");
 
     uint256 constant INITIAL_LIQUIDITY_A = 100_000e18;
@@ -33,8 +33,8 @@ contract ConstantProductAMMTest is Test {
         // Mint tokens to alice (LP provider) and bob (swapper)
         tokenA.mint(alice, 1_000_000e18);
         tokenB.mint(alice, 1_000_000e18);
-        tokenA.mint(bob,   1_000_000e18);
-        tokenB.mint(bob,   1_000_000e18);
+        tokenA.mint(bob, 1_000_000e18);
+        tokenB.mint(bob, 1_000_000e18);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -327,7 +327,7 @@ contract ConstantProductAMMFuzz is Test {
     ERC20Mock public token1;
 
     address alice = makeAddr("alice");
-    address bob   = makeAddr("bob");
+    address bob = makeAddr("bob");
     address admin = makeAddr("admin");
 
     function setUp() public {
@@ -339,8 +339,8 @@ contract ConstantProductAMMFuzz is Test {
 
         token0.mint(alice, type(uint128).max);
         token1.mint(alice, type(uint128).max);
-        token0.mint(bob,   type(uint128).max);
-        token1.mint(bob,   type(uint128).max);
+        token0.mint(bob, type(uint128).max);
+        token1.mint(bob, type(uint128).max);
 
         // Seed 100k/200k liquidity
         vm.startPrank(alice);

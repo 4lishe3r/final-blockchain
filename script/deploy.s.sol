@@ -54,13 +54,13 @@ contract DeployScript is Script {
     }
 
     function run() external returns (Deployment memory d) {
-        uint256 deployerKey  = vm.envUint("DEPLOYER_PRIVATE_KEY");
-        address deployer     = vm.addr(deployerKey);
-        address multisig     = vm.envAddress("MULTISIG_ADDRESS");
+        uint256 deployerKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
+        address deployer = vm.addr(deployerKey);
+        address multisig = vm.envAddress("MULTISIG_ADDRESS");
         address chainlinkFeed = vm.envAddress("CHAINLINK_ETH_USD");
-        address assetToken   = vm.envAddress("ASSET_TOKEN");
-        address tokenA       = vm.envAddress("TOKEN_A");
-        address tokenB       = vm.envAddress("TOKEN_B");
+        address assetToken = vm.envAddress("ASSET_TOKEN");
+        address tokenA = vm.envAddress("TOKEN_A");
+        address tokenB = vm.envAddress("TOKEN_B");
 
         console2.log("=== DeFi Super-App Deployment ===");
         console2.log("Deployer  :", deployer);
@@ -74,12 +74,10 @@ contract DeployScript is Script {
         // 1. GovernanceToken — UUPS proxy
         // ─────────────────────────────────────────────────────────
         GovernanceToken govImpl = new GovernanceToken();
-        bytes memory govInitData = abi.encodeCall(
-            GovernanceToken.initialize,
-            ("DeFi Governance Token", "DGT", 100_000_000e18, deployer)
-        );
+        bytes memory govInitData =
+            abi.encodeCall(GovernanceToken.initialize, ("DeFi Governance Token", "DGT", 100_000_000e18, deployer));
         ERC1967Proxy govProxy = new ERC1967Proxy(address(govImpl), govInitData);
-        d.govTokenImpl  = address(govImpl);
+        d.govTokenImpl = address(govImpl);
         d.govTokenProxy = address(govProxy);
         console2.log("GovToken impl  :", d.govTokenImpl);
         console2.log("GovToken proxy :", d.govTokenProxy);
@@ -113,11 +111,10 @@ contract DeployScript is Script {
         // ─────────────────────────────────────────────────────────
         YieldVault vaultImpl = new YieldVault();
         bytes memory vaultInitData = abi.encodeCall(
-            YieldVault.initialize,
-            (assetToken, "Yield Vault Shares", "yvShares", 0, d.oracle, deployer)
+            YieldVault.initialize, (assetToken, "Yield Vault Shares", "yvShares", 0, d.oracle, deployer)
         );
         ERC1967Proxy vaultProxy = new ERC1967Proxy(address(vaultImpl), vaultInitData);
-        d.vault      = address(vaultImpl);
+        d.vault = address(vaultImpl);
         d.vaultProxy = address(vaultProxy);
         console2.log("Vault impl     :", d.vault);
         console2.log("Vault proxy    :", d.vaultProxy);
@@ -137,7 +134,7 @@ contract DeployScript is Script {
             2 days,
             proposers,
             executors,
-            deployer  // temporary admin
+            deployer // temporary admin
         );
         d.timelock = address(timelock);
         console2.log("Timelock       :", d.timelock);
@@ -160,11 +157,11 @@ contract DeployScript is Script {
         //     • CANCELLER_ROLE → multisig (emergency)
         //     • Revoke deployer's TIMELOCK_ADMIN_ROLE
         // ─────────────────────────────────────────────────────────
-        bytes32 PROPOSER_ROLE   = timelock.PROPOSER_ROLE();
-        bytes32 CANCELLER_ROLE  = timelock.CANCELLER_ROLE();
-        bytes32 ADMIN_ROLE      = timelock.DEFAULT_ADMIN_ROLE();
+        bytes32 PROPOSER_ROLE = timelock.PROPOSER_ROLE();
+        bytes32 CANCELLER_ROLE = timelock.CANCELLER_ROLE();
+        bytes32 ADMIN_ROLE = timelock.DEFAULT_ADMIN_ROLE();
 
-        timelock.grantRole(PROPOSER_ROLE,  d.governor);
+        timelock.grantRole(PROPOSER_ROLE, d.governor);
         timelock.grantRole(CANCELLER_ROLE, multisig);
         timelock.revokeRole(ADMIN_ROLE, deployer); // no admin backdoor
 
@@ -172,12 +169,8 @@ contract DeployScript is Script {
         // 11. Transfer protocol admin roles to Timelock
         //     (deployer relinquishes control)
         // ─────────────────────────────────────────────────────────
-        GovernanceToken(d.govTokenProxy).grantRole(
-            GovernanceToken(d.govTokenProxy).DEFAULT_ADMIN_ROLE(), d.timelock
-        );
-        GovernanceToken(d.govTokenProxy).grantRole(
-            GovernanceToken(d.govTokenProxy).UPGRADER_ROLE(), d.timelock
-        );
+        GovernanceToken(d.govTokenProxy).grantRole(GovernanceToken(d.govTokenProxy).DEFAULT_ADMIN_ROLE(), d.timelock);
+        GovernanceToken(d.govTokenProxy).grantRole(GovernanceToken(d.govTokenProxy).UPGRADER_ROLE(), d.timelock);
 
         // ─────────────────────────────────────────────────────────
         // 12. Mint initial token supply to multisig for distribution

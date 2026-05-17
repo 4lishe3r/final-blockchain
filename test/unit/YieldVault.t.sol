@@ -2,15 +2,11 @@
 pragma solidity ^0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {
-    ERC1967Proxy
-} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 import {YieldVault} from "../../src/vault/YieldVault.sol";
 import {MockAggregator} from "../mocks/MockAggregator.sol";
-import {
-    ChainlinkOracleAdapter
-} from "../../src/oracles/ChainlinkOracleAdapter.sol";
+import {ChainlinkOracleAdapter} from "../../src/oracles/ChainlinkOracleAdapter.sol";
 
 contract YieldVaultTest is Test {
     YieldVault public vault;
@@ -33,15 +29,7 @@ contract YieldVaultTest is Test {
 
         YieldVault impl = new YieldVault();
         bytes memory initData = abi.encodeCall(
-            YieldVault.initialize,
-            (
-                address(asset),
-                "Yield Vault",
-                "yVLT",
-                MAX_DEPOSIT,
-                address(oracle),
-                admin
-            )
+            YieldVault.initialize, (address(asset), "Yield Vault", "yVLT", MAX_DEPOSIT, address(oracle), admin)
         );
         ERC1967Proxy proxy = new ERC1967Proxy(address(impl), initData);
         vault = YieldVault(address(proxy));
@@ -357,10 +345,8 @@ contract YieldVaultFuzz is Test {
     function setUp() public {
         asset = new ERC20Mock();
         YieldVault impl = new YieldVault();
-        bytes memory initData = abi.encodeCall(
-            YieldVault.initialize,
-            (address(asset), "Yield Vault", "yVLT", 0, address(0), admin)
-        );
+        bytes memory initData =
+            abi.encodeCall(YieldVault.initialize, (address(asset), "Yield Vault", "yVLT", 0, address(0), admin));
         ERC1967Proxy proxy = new ERC1967Proxy(address(impl), initData);
         vault = YieldVault(address(proxy));
 
@@ -384,10 +370,7 @@ contract YieldVaultFuzz is Test {
     }
 
     /// @notice Shares are proportional to deposit when vault is empty.
-    function testFuzz_Shares_ProportionalToDeposit(
-        uint256 a,
-        uint256 b
-    ) public {
+    function testFuzz_Shares_ProportionalToDeposit(uint256 a, uint256 b) public {
         a = bound(a, 1e12, 50_000e18);
         b = bound(b, 1e12, 50_000e18);
 

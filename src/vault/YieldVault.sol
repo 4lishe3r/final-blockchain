@@ -264,10 +264,7 @@ contract YieldVault is
                         ERC-20 OVERRIDES
     //////////////////////////////////////////////////////////////*/
 
-    function _update(address from, address to, uint256 value)
-        internal
-        override(ERC20Upgradeable)
-    {
+    function _update(address from, address to, uint256 value) internal override(ERC20Upgradeable) {
         super._update(from, to, value);
     }
 }

@@ -9,10 +9,10 @@ contract TreasuryTest is Test {
     Treasury public treasury;
     ERC20Mock public token;
 
-    address public admin    = makeAddr("admin");
+    address public admin = makeAddr("admin");
     address public timelock = makeAddr("timelock");
-    address public alice    = makeAddr("alice");
-    address public bob      = makeAddr("bob");
+    address public alice = makeAddr("alice");
+    address public bob = makeAddr("bob");
 
     function setUp() public {
         treasury = new Treasury(admin, timelock);
@@ -244,7 +244,9 @@ contract ReentrantClaimer {
     Treasury public target;
     uint256 public count;
 
-    constructor(Treasury _t) { target = _t; }
+    constructor(Treasury _t) {
+        target = _t;
+    }
 
     function attack() external {
         target.claimETH();
@@ -268,7 +270,7 @@ contract TreasuryFuzz is Test {
     ERC20Mock public token;
 
     address timelock = makeAddr("timelock");
-    address admin    = makeAddr("admin");
+    address admin = makeAddr("admin");
 
     function setUp() public {
         treasury = new Treasury(admin, timelock);
