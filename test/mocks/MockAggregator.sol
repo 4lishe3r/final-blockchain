@@ -5,24 +5,33 @@ import {AggregatorV3Interface} from "../../src/interfaces/AggregatorV3Interface.
 
 /// @title MockAggregator
 /// @notice Chainlink AggregatorV3 mock for unit and fuzz tests.
-///         Set any price, make it stale, simulate bad rounds.
 contract MockAggregator is AggregatorV3Interface {
     int256 private _answer;
     uint256 private _updatedAt;
     uint80 private _roundId;
     uint8 private immutable _decimals;
+    bool private _invalidRound;
 
-    constructor(uint8 dec_, int256 initialPrice) {
-        _decimals = dec_;
-        _answer = initialPrice;
-        _updatedAt = block.timestamp;
-        _roundId = 1;
+    /// @param initialPrice  Initial price (in feed decimals)
+    /// @param dec_          Feed decimals
+    constructor(int256 initialPrice, uint8 dec_) {
+        _decimals    = dec_;
+        _answer      = initialPrice;
+        _updatedAt   = block.timestamp;
+        _roundId     = 1;
+        _invalidRound = false;
     }
 
     // ─── Setters (test helpers) ──────────────────────────────────
 
     function setPrice(int256 price) external {
-        _answer = price;
+        _answer    = price;
+        _updatedAt = block.timestamp;
+        _roundId++;
+    }
+
+    function setAnswer(int256 answer) external {
+        _answer    = answer;
         _updatedAt = block.timestamp;
         _roundId++;
     }
@@ -31,10 +40,9 @@ contract MockAggregator is AggregatorV3Interface {
         _updatedAt = ts;
     }
 
-    function setAnswer(int256 answer, uint256 updatedAt) external {
-        _answer = answer;
-        _updatedAt = updatedAt;
-        _roundId++;
+    /// @dev Simulate a round where answeredInRound < roundId (bad round)
+    function setInvalidRound(bool invalid) external {
+        _invalidRound = invalid;
     }
 
     // ─── AggregatorV3Interface ───────────────────────────────────
@@ -66,6 +74,7 @@ contract MockAggregator is AggregatorV3Interface {
         override
         returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)
     {
-        return (_roundId, _answer, _updatedAt, _updatedAt, _roundId);
+        uint80 answered = _invalidRound ? _roundId - 1 : _roundId;
+        return (_roundId, _answer, _updatedAt, _updatedAt, answered);
     }
 }
