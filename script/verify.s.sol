@@ -43,12 +43,12 @@ contract VerifyScript is Script {
     }
 
     function _checkTimelock(address timelock, address governor) internal view {
-        console2.log("── Timelock ──────────────────────────────");
+        console2.log("--- Timelock ---");
         TimelockController tl = TimelockController(payable(timelock));
 
         // Delay must be 2 days
         uint256 delay = tl.getMinDelay();
-        _assert("Timelock delay == 2 days", delay == 2 days, delay, 2 days);
+        _assertBool("Timelock delay == 2 days", delay == 2 days);
 
         // Governor must have PROPOSER_ROLE
         bool govIsProposer = tl.hasRole(tl.PROPOSER_ROLE(), governor);
@@ -61,7 +61,7 @@ contract VerifyScript is Script {
     }
 
     function _checkGovernor(address governor, address govToken, address timelock) internal view {
-        console2.log("\n── Governor ─────────────────────────────");
+        console2.log("\n--- Governor ---");
         DeFiGovernor gov = DeFiGovernor(payable(governor));
 
         _assert("Voting delay  == 7200 blocks (1 day)",  gov.votingDelay(),  7200,  7200);
@@ -78,7 +78,7 @@ contract VerifyScript is Script {
     }
 
     function _checkTreasury(address treasury, address timelock) internal view {
-        console2.log("\n── Treasury ────────────────────────────");
+        console2.log("\n--- Treasury ---");
         Treasury t = Treasury(payable(treasury));
 
         bytes32 SPENDER = keccak256("SPENDER_ROLE");
@@ -87,7 +87,7 @@ contract VerifyScript is Script {
     }
 
     function _checkNoAdminBackdoor(address govToken, address timelock) internal view {
-        console2.log("\n── No Admin Backdoor ───────────────────");
+        console2.log("\n--- No Admin Backdoor ---");
         GovernanceToken gt = GovernanceToken(govToken);
         bytes32 ADMIN = gt.DEFAULT_ADMIN_ROLE();
         bytes32 UPGRADER = gt.UPGRADER_ROLE();

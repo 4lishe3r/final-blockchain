@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import {AggregatorV3Interface} from "../../src/interfaces/AggregatorV3Interface.sol";
 
 /// @title MockAggregator
 /// @notice Chainlink AggregatorV3 mock for unit and fuzz tests.

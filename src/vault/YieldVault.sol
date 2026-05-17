@@ -7,7 +7,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+// ReentrancyGuardUpgradeable inlined below (avoids OZ v5 path resolution issues on Windows)
 import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
@@ -43,9 +43,19 @@ contract YieldVault is
     ERC4626Upgradeable,
     AccessControlUpgradeable,
     UUPSUpgradeable,
-    ReentrancyGuardUpgradeable,
     PausableUpgradeable
 {
+    // ── Manual reentrancy guard (replaces ReentrancyGuardUpgradeable) ──
+    uint256 private _reentrancyStatus;
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED = 2;
+
+    modifier nonReentrant() {
+        require(_reentrancyStatus != _ENTERED, "ReentrancyGuard: reentrant call");
+        _reentrancyStatus = _ENTERED;
+        _;
+        _reentrancyStatus = _NOT_ENTERED;
+    }
     using SafeERC20 for IERC20;
     using Math for uint256;
 
@@ -114,9 +124,8 @@ contract YieldVault is
         __ERC4626_init(IERC20(asset_));
         __ERC20_init(name_, symbol_);
         __AccessControl_init();
-        __UUPSUpgradeable_init();
-        __ReentrancyGuard_init();
         __Pausable_init();
+        _reentrancyStatus = _NOT_ENTERED;
 
         maxDepositPerUser = maxDepositPerUser_;
         oracle = IOracle(oracle_);
@@ -257,7 +266,7 @@ contract YieldVault is
 
     function _update(address from, address to, uint256 value)
         internal
-        override(ERC20Upgradeable, ERC4626Upgradeable)
+        override(ERC20Upgradeable)
     {
         super._update(from, to, value);
     }

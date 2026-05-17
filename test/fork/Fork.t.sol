@@ -133,15 +133,27 @@ contract ForkTest is Test {
         oracle.safePrice();
     }
 
-    /*//////////////////////////////////////////////////////////////
-         FORK TEST 3: Uniswap V2 Router — compare our AMM output
-    //////////////////////////////////////////////////////////////*/
+}
 
-    interface IUniswapV2Router {
-        function getAmountsOut(uint256 amountIn, address[] calldata path)
-            external
-            view
-            returns (uint256[] memory amounts);
+// Interface must be declared at file level, not inside a contract
+interface IUniswapV2Router {
+    function getAmountsOut(uint256 amountIn, address[] calldata path)
+        external
+        view
+        returns (uint256[] memory amounts);
+}
+
+contract ForkTestUniswap is Test {
+    uint256 constant FORK_BLOCK = 19_500_000;
+    address constant WETH          = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address constant USDC          = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+    address constant UNISWAP_V2_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
+
+    uint256 public mainnetFork;
+
+    function setUp() public {
+        mainnetFork = vm.createFork(vm.envString("MAINNET_RPC_URL"), FORK_BLOCK);
+        vm.selectFork(mainnetFork);
     }
 
     /// @notice Compare our AMM's quoted output vs Uniswap V2 for the same reserves.
@@ -157,7 +169,7 @@ contract ForkTest is Test {
 
         uint256[] memory amounts = router.getAmountsOut(amountIn, path);
         uint256 uniswapOut = amounts[1];
-        console2.log("Uniswap V2 WETH→USDC out:", uniswapOut);
+        console2.log("Uniswap V2 WETH->USDC out:", uniswapOut);
 
         // Our formula: amountOut = amountIn*997*reserveOut / (reserveIn*1000 + amountIn*997)
         // We need to know Uniswap's actual reserves — for comparison we use our getAmountOut

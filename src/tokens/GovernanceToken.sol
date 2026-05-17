@@ -80,7 +80,6 @@ contract GovernanceToken is
         __ERC20Votes_init();
         __ERC20Permit_init(name_);
         __AccessControl_init();
-        __UUPSUpgradeable_init();
 
         maxSupply = maxSupply_;
 
@@ -139,7 +138,7 @@ contract GovernanceToken is
         return "mode=blocknumber&from=default";
     }
 
-    function _update(address from, address to, uint256 value) internal override(ERC20Upgradeable, ERC20VotesUpgradeable) {
+    function _update(address from, address to, uint256 value) internal virtual override(ERC20Upgradeable, ERC20VotesUpgradeable) {
         super._update(from, to, value);
     }
 
