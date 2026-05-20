@@ -20,6 +20,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.7.1
 
       - name: Install Node (for solhint + prettier)
         uses: actions/setup-node@v4
@@ -49,6 +51,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.7.1
 
       - name: Build
         run: forge build --sizes
@@ -89,6 +93,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.7.1
 
       - name: Run Slither
         uses: crytic/slither-action@v0.4.0
