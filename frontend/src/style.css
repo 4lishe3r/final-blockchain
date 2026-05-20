@@ -3,7 +3,7 @@
    Fonts: Syne (UI) + DM Mono (data/numbers)
    ═══════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap");
 
 /* ─── Tokens ─── */
 :root {
@@ -32,7 +32,7 @@
   --r-lg: 22px;
   --r-xl: 28px;
 
-  font-family: 'Syne', system-ui, sans-serif;
+  font-family: "Syne", system-ui, sans-serif;
   color: var(--txt);
   background: var(--bg);
 }
@@ -48,17 +48,34 @@ body {
   min-height: 100vh;
   background-color: var(--bg);
   background-image:
-    linear-gradient(rgba(0, 212, 255, .04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 212, 255, .04) 1px, transparent 1px),
-    radial-gradient(ellipse 65% 55% at -5% 0%, rgba(139, 92, 246, .22) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 45% at 108% 0%, rgba(0, 212, 255, .14) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 35% at 50% 105%, rgba(0, 50, 110, .35) 0%, transparent 70%);
-  background-size: 52px 52px, 52px 52px, 100% 100%, 100% 100%, 100% 100%;
+    linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+    radial-gradient(
+      ellipse 65% 55% at -5% 0%,
+      rgba(139, 92, 246, 0.22) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 108% 0%,
+      rgba(0, 212, 255, 0.14) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 80% 35% at 50% 105%,
+      rgba(0, 50, 110, 0.35) 0%,
+      transparent 70%
+    );
+  background-size:
+    52px 52px,
+    52px 52px,
+    100% 100%,
+    100% 100%,
+    100% 100%;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: rgba(0, 212, 255, .22);
+  background: rgba(0, 212, 255, 0.22);
   color: var(--txt);
 }
 
@@ -71,7 +88,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, .2);
+  background: rgba(0, 212, 255, 0.2);
   border-radius: 4px;
 }
 
@@ -79,16 +96,21 @@ body {
 h1,
 h2,
 h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: "Syne", sans-serif;
   font-weight: 800;
-  letter-spacing: -.03em;
+  letter-spacing: -0.03em;
   line-height: 1.08;
   margin: 0 0 6px;
 }
 
 h1 {
   font-size: clamp(2.2rem, 5vw, 3.6rem);
-  background: linear-gradient(130deg, #fff 0%, var(--cyan) 55%, var(--violet) 100%);
+  background: linear-gradient(
+    130deg,
+    #fff 0%,
+    var(--cyan) 55%,
+    var(--violet) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -129,44 +151,65 @@ p {
   border-radius: var(--r-xl);
   position: relative;
   overflow: hidden;
-  background: linear-gradient(140deg, rgba(9, 17, 38, .95) 0%, rgba(7, 12, 26, .97) 60%, rgba(14, 9, 30, .95) 100%);
+  background: linear-gradient(
+    140deg,
+    rgba(9, 17, 38, 0.95) 0%,
+    rgba(7, 12, 26, 0.97) 60%,
+    rgba(14, 9, 30, 0.95) 100%
+  );
   border: 1px solid var(--border);
-  box-shadow: 0 12px 60px rgba(0, 0, 0, .65), 0 0 80px rgba(139, 92, 246, .08);
+  box-shadow:
+    0 12px 60px rgba(0, 0, 0, 0.65),
+    0 0 80px rgba(139, 92, 246, 0.08);
   backdrop-filter: blur(24px);
 }
 
 .hero::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 5%, var(--cyan) 40%, var(--violet) 70%, transparent 95%);
-  opacity: .55;
+  background: linear-gradient(
+    90deg,
+    transparent 5%,
+    var(--cyan) 40%,
+    var(--violet) 70%,
+    transparent 95%
+  );
+  opacity: 0.55;
 }
 
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 65% 65% at 0% 0%, rgba(0, 212, 255, .07) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 55% at 100% 100%, rgba(139, 92, 246, .1) 0%, transparent 55%);
+    radial-gradient(
+      ellipse 65% 65% at 0% 0%,
+      rgba(0, 212, 255, 0.07) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 55% 55% at 100% 100%,
+      rgba(139, 92, 246, 0.1) 0%,
+      transparent 55%
+    );
   pointer-events: none;
   border-radius: inherit;
 }
 
 /* ─── Eyebrow ─── */
 .eyebrow {
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
   font-size: 10px;
   font-weight: 500;
-  letter-spacing: .14em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--cyan);
   margin: 0 0 14px;
-  opacity: .85;
+  opacity: 0.85;
 }
 
 /* ─── Wallet Box ─── */
@@ -181,10 +224,10 @@ p {
 }
 
 .walletBox span {
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
   font-size: 11px;
   color: var(--txt-2);
-  background: rgba(0, 212, 255, .07);
+  background: rgba(0, 212, 255, 0.07);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   padding: 7px 12px;
@@ -192,7 +235,7 @@ p {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  letter-spacing: .02em;
+  letter-spacing: 0.02em;
 }
 
 /* ─── Buttons ─── */
@@ -204,45 +247,53 @@ button {
   border: 0;
   border-radius: var(--r-md);
   padding: 11px 20px;
-  font-family: 'Syne', sans-serif;
+  font-family: "Syne", sans-serif;
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: .04em;
+  letter-spacing: 0.04em;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   white-space: nowrap;
-  transition: transform .18s ease, box-shadow .18s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
   background: linear-gradient(135deg, #0077a8 0%, #00b8d9 45%, #6b40ad 100%);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(0, 212, 255, .22), 0 1px 0 rgba(255, 255, 255, .08) inset;
+  box-shadow:
+    0 4px 20px rgba(0, 212, 255, 0.22),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
 }
 
 button::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(140deg, rgba(255, 255, 255, .13) 0%, transparent 55%);
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.13) 0%,
+    transparent 55%
+  );
   pointer-events: none;
 }
 
 button::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: 1px solid rgba(0, 212, 255, .3);
+  border: 1px solid rgba(0, 212, 255, 0.3);
   pointer-events: none;
 }
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 212, 255, .32);
+  box-shadow: 0 8px 28px rgba(0, 212, 255, 0.32);
 }
 
 button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(0, 212, 255, .18);
+  box-shadow: 0 2px 10px rgba(0, 212, 255, 0.18);
 }
 
 /* ─── Grid of cards ─── */
@@ -263,24 +314,34 @@ button:active {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, .55);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(18px);
-  transition: border-color .25s, box-shadow .25s, transform .25s;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s,
+    transform 0.25s;
 }
 
 .card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 12%;
   right: 12%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, .35), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 212, 255, 0.35),
+    transparent
+  );
 }
 
 .card:hover {
-  border-color: rgba(0, 212, 255, .28);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, .55), 0 0 40px rgba(0, 212, 255, .07);
+  border-color: rgba(0, 212, 255, 0.28);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(0, 212, 255, 0.07);
   transform: translateY(-2px);
   background: var(--bg-card-hov);
 }
@@ -298,7 +359,7 @@ button:active {
   padding: 9px 12px;
   border-radius: var(--r-sm);
   background: var(--bg-row);
-  border: 1px solid rgba(0, 212, 255, .06);
+  border: 1px solid rgba(0, 212, 255, 0.06);
   min-height: 38px;
 }
 
@@ -307,13 +368,13 @@ button:active {
   font-weight: 600;
   color: var(--txt-2);
   text-transform: uppercase;
-  letter-spacing: .07em;
+  letter-spacing: 0.07em;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .row b {
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
   font-size: 14px;
   font-weight: 500;
   color: var(--txt);
@@ -323,7 +384,7 @@ button:active {
 
 /* ─── Address (truncated cyan mono) ─── */
 .addressText {
-  font-family: 'DM Mono', monospace !important;
+  font-family: "DM Mono", monospace !important;
   font-size: 11px !important;
   color: var(--cyan) !important;
   overflow: hidden;
@@ -336,7 +397,7 @@ button:active {
 
 /* ─── Inputs ─── */
 input {
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
   font-size: 15px;
   width: 100%;
   padding: 13px 16px;
@@ -346,23 +407,28 @@ input {
   background: var(--bg-input);
   color: var(--txt);
   outline: none;
-  transition: border-color .2s, box-shadow .2s, background .2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
 }
 
 input::placeholder {
-  font-family: 'Syne', sans-serif;
+  font-family: "Syne", sans-serif;
   font-size: 13px;
   color: var(--txt-3);
 }
 
 input:hover {
-  border-color: rgba(0, 212, 255, .28);
+  border-color: rgba(0, 212, 255, 0.28);
 }
 
 input:focus {
   border-color: var(--border-focus);
-  background: rgba(2, 8, 20, .95);
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, .09), 0 0 16px rgba(0, 212, 255, .06);
+  background: rgba(2, 8, 20, 0.95);
+  box-shadow:
+    0 0 0 3px rgba(0, 212, 255, 0.09),
+    0 0 16px rgba(0, 212, 255, 0.06);
 }
 
 /* ─── Banners ─── */
@@ -377,20 +443,20 @@ input:focus {
 }
 
 .warning {
-  background: rgba(245, 158, 11, .1);
-  border: 1px solid rgba(245, 158, 11, .3);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
   color: var(--amber);
 }
 
 .error {
-  background: rgba(255, 77, 109, .1);
-  border: 1px solid rgba(255, 77, 109, .3);
+  background: rgba(255, 77, 109, 0.1);
+  border: 1px solid rgba(255, 77, 109, 0.3);
   color: var(--red);
 }
 
 .success {
-  background: rgba(0, 255, 136, .08);
-  border: 1px solid rgba(0, 255, 136, .28);
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.28);
   color: var(--green);
 }
 
@@ -407,18 +473,20 @@ input:focus {
   gap: 6px;
   padding: 18px 20px;
   border-radius: var(--r-md);
-  background: rgba(4, 8, 20, .7);
+  background: rgba(4, 8, 20, 0.7);
   border: 1px solid var(--border);
-  transition: border-color .2s, background .2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 }
 
 .proposal:hover {
-  border-color: rgba(0, 212, 255, .25);
-  background: rgba(6, 12, 28, .85);
+  border-color: rgba(0, 212, 255, 0.25);
+  background: rgba(6, 12, 28, 0.85);
 }
 
 .proposal b {
-  font-family: 'Syne', sans-serif;
+  font-family: "Syne", sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--txt);
@@ -426,10 +494,10 @@ input:focus {
 }
 
 .proposal span {
-  font-family: 'DM Mono', monospace;
+  font-family: "DM Mono", monospace;
   font-size: 12px;
   color: var(--txt-2);
-  letter-spacing: .02em;
+  letter-spacing: 0.02em;
 }
 
 .proposal span:last-child {
@@ -483,10 +551,9 @@ input:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
-    transition-duration: .01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
