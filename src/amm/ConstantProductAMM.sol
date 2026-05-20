@@ -22,13 +22,10 @@ contract ConstantProductAMM is ERC20 {
         return (reserve0, reserve1);
     }
 
-    function addLiquidity(
-        uint256 amount0Desired,
-        uint256 amount1Desired,
-        uint256,
-        uint256,
-        address to
-    ) external returns (uint256 shares) {
+    function addLiquidity(uint256 amount0Desired, uint256 amount1Desired, uint256, uint256, address to)
+        external
+        returns (uint256 shares)
+    {
         require(amount0Desired > 0 && amount1Desired > 0, "zero amount");
 
         token0.transferFrom(msg.sender, address(this), amount0Desired);
@@ -46,12 +43,10 @@ contract ConstantProductAMM is ERC20 {
         _mint(to, shares);
     }
 
-    function swap(
-        address tokenIn,
-        uint256 amountIn,
-        uint256 amountOutMin,
-        address to
-    ) external returns (uint256 amountOut) {
+    function swap(address tokenIn, uint256 amountIn, uint256 amountOutMin, address to)
+        external
+        returns (uint256 amountOut)
+    {
         require(amountIn > 0, "zero amount");
         require(tokenIn == address(token0) || tokenIn == address(token1), "invalid token");
 
@@ -81,5 +76,27 @@ contract ConstantProductAMM is ERC20 {
             reserve1 += amountIn;
             reserve0 -= amountOut;
         }
+    }
+
+    function removeLiquidity(uint256 liquidity, uint256 amount0Min, uint256 amount1Min, address to)
+        external
+        returns (uint256 amount0, uint256 amount1)
+    {
+        require(liquidity > 0, "zero amount");
+        uint256 supply = totalSupply();
+        amount0 = (liquidity * reserve0) / supply;
+        amount1 = (liquidity * reserve1) / supply;
+        require(amount0 >= amount0Min, "slippage");
+        require(amount1 >= amount1Min, "slippage");
+        _burn(msg.sender, liquidity);
+        reserve0 -= amount0;
+        reserve1 -= amount1;
+        token0.transfer(to, amount0);
+        token1.transfer(to, amount1);
+    }
+
+    function getAmountOut(uint256 amountIn, uint256 reserveIn, uint256 reserveOut) external pure returns (uint256) {
+        uint256 amountInFee = amountIn * 997;
+        return (amountInFee * reserveOut) / (reserveIn * 1000 + amountInFee);
     }
 }
